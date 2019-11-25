@@ -110,7 +110,7 @@
 <h2>당신을 위한 추천 영화</h2>
     <div class="swiper-wrapper">
         {% for movie in movies %}
-            <div class="swiper-slide" style="background-image:url({{movie.poster_url}}) "></div>
+            <div class="swiper-slide" style="background-image:url({{movie.poster_url}})" onclick="location.href='{% url 'movies:detail' movie.id %}'"></div>    
         {% endfor %}
     </div>
     <!-- Add Pagination -->
@@ -121,7 +121,7 @@
 <h2>당신을 위한 추천 영화</h2>
     <div class="swiper-wrapper">
         {% for movie in movies %}
-            <div class="swiper-slide" style="background-image:url({{movie.poster_url}}) "></div>
+            <div class="swiper-slide" style="background-image:url({{movie.poster_url}})" onclick="location.href='{% url 'movies:detail' movie.id %}'"></div>
         {% endfor %}
     </div>
     <!-- Add Pagination -->
@@ -131,7 +131,9 @@
 <h2>액션</h2>
     <div class="swiper-wrapper">
         {% for movie in movies %}
-            <div class="swiper-slide big" style="background-image:url({{movie.poster_url}})"></div>
+        {% if movie.genre == action %}
+            <div class="swiper-slide" style="background-image:url({{movie.poster_url}})" onclick="location.href='{% url 'movies:detail' movie.id %}'"></div>
+        {% endif %}
         {% endfor %}
     </div>
     <!-- Add Pagination -->
