@@ -17,7 +17,7 @@
     text-overflow: ellipsis; 
     white-space: normal; 
     line-height: 1.2;
-    height: 18; 
+    height: 3.6; 
     text-align: left; 
     word-wrap: break-word; 
     display: -webkit-box; 

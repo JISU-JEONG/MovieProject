@@ -8,9 +8,93 @@
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Jua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="/your-path-to-fontawesome/css/brands.css" rel="stylesheet">
+    <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet">
+    <style>
+
+    .movie_index_font{
+      font-family: 'Jua', sans-serif;
+      color: #ffffff;
+      text-shadow: 10px 10px 10px #000000;
+    }
+    .my-image {
+    width: 250px;
+    height: 400px;
+}
+.target { 
+    display: inline-block; 
+    width: 400px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: normal; 
+    line-height: 1.2;
+    height: 3.6; 
+    text-align: left; 
+    word-wrap: break-word; 
+    display: -webkit-box; 
+    -webkit-line-clamp: 4; 
+    -webkit-box-orient: vertical; 
+ }
+body {
+    background: #fff;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color:#000;
+    margin: 0;
+    padding: 0;
+}
+.swiper-container {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.swiper-slide {
+    background-position: center;
+    background-size: cover;
+    width: 300px;
+    height: 420px;
+}
+
+
+.big {
+    -webkit-transition: width 2s; /* For Safari 3.1 to 6.0 */
+    transition: width 2s;
+}
+.big {
+  width: 340px;
+  height: 450px;
+}
+
+.image-container {
+    position:relative;
+    display:inline-block;
+}
+
+
+
+.image-grey {
+    display:block;
+    -webkit-filter: grayscale(100%);
+}
+
+.image-container:after {
+    position:absolute;
+    content:"";
+    top:0;
+    left:50%;
+        width:50%;
+    height:100%;
+    background-image:url({{movie.view_img}});
+    background-position:top right;
+}
+
+    </style>
     {% block css %}{% endblock %}
 
 </head>
@@ -32,7 +116,6 @@
     </div>
     {% endfor %}
 {% endif %}
-<div>
 {% block body %}
 
 {% endblock %}  
