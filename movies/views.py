@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.contrib import messages
-from .models import Movie,Review, Score
+from .models import Movie,Review, Score, Genre
 from .forms import ReviewForm, ScoreForm
 
 # simil 함수 유저가 준 점수 평균
@@ -59,6 +59,7 @@ def solve(user):
 def index(request):
     movies = Movie.objects.all()
     user = request.user 
+    genres = Genre.objects.all()
     recommend = []
     if request.user.is_authenticated and len(user.rate_movies.all())>10:
         recommend = solve(user)
@@ -80,7 +81,8 @@ def index(request):
         recommend = reco
     context = {
         'movies' : movies,
-        'recommend' : recommend
+        'recommend' : recommend,
+        'genres' : genres
     }
     print(movies)
     print(recommend)
