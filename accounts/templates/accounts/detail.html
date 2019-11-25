@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>{{puser.username}} 팔로우수: {{puser.followings.count}} 팔로잉수: {{puser.followers.count}}
+<form action="{% url 'accounts:follow' puser.pk %}" method="POST">
+{% csrf_token %}
+{% if user != puser %}
+{% if user in puser.followings.all %}
+<input type="submit" value="팔로우취소">
+{% else %}
+<input type="submit" value="팔로우">
+{% endif %}
+{% endif %}
+</form>
+</h1>
+<hr>
+<h1>{{ puser.username }}가 한 리뷰</h1>
+{% for review in puser.review_set.all %}
+<p> 평점 : {{review.score}} 리뷰 : {{review.content}} </p>
+{% endfor %}
+<hr>
+<h1>{{ puser.username }}가 좋아하는 영화</h1>
+{% for movie in puser.like_movies.all %}
+{{movie.title}}
+{% endfor %}
+<hr>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block body %}
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</div>
+{% endif %}
+<p>주말에하는 용흠이와 함께하는 프로젝트 당첨</p>
+<form action="{% url 'movies:score' movie.id %}" method='POST'>
+{{score_form.as_p}}
+<input type="submit" value='점수주기'>
+{% csrf_token %}
+</form>
+
+{% for score in scores %}
+<p>제가준 점수는 {{score.score}} 입니다.</p>
+{% empty %}
+<p>영화를 평가해주세요</p>
+{% endfor %}
+
+
+<p>{{movie.title}}
+{{ review_avg }}
+ <form action="{% url 'movies:like' movie.pk %}" method='POST'>
+ {% csrf_token %}
+ {% if user in movie.like_users.all %}
+ <input type="submit" value='좋아요 취소'>
+ {% else %}
+ <input type="submit" value='좋아요'>
+ {% endif %}
+ </form>
+{{ movie.like_users.count }}
+ </p>
+<p>{{movie.audience}}</p>
+<p>{{movie.genre.name}}</p>
+<img src="{{movie.poster_url}}" alt="" class="my-image">
+<hr>
+<textarea name="" id="" cols="100" rows="30">
+{{movie.description}} 
+</textarea>
+<hr>
+<p>리뷰 하기</p>
+<form action="{% url 'movies:review_new' movie.id %}" method="POST">
+{% csrf_token %}
+{{ review_form.as_p }}
+<input type="submit" value='리뷰하기'>
+</form>
+{% for review in movie.review_set.all %}
+<p>{{review.user}} => {{review.content}} {{ review.score }}
+{% if user == review.user %}
+ <form action="{% url 'movies:review_delete' movie.pk review.pk %}" method='POST'>
+ {% csrf_token %}
+ <input type="submit" value='리뷰 삭제'>
+ </form>
+ {% endif %}
+ </p>
+{% endfor %}
+{% endblock  %}
