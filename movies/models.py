@@ -25,6 +25,7 @@ class Movie(models.Model):
         through='Score',
         blank=True
     )
+    
 class Score(models.Model):
     score = models.IntegerField(default=0)
     user  = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

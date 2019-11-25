@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 {% block body %}
 <h1>{{puser.username}} 팔로우수: {{puser.followings.count}} 팔로잉수: {{puser.followers.count}}
 <form action="{% url 'accounts:follow' puser.pk %}" method="POST">

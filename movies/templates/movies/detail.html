@@ -7,20 +7,6 @@
     {% endfor %}
 </div>
 {% endif %}
-<p>주말에하는 용흠이와 함께하는 프로젝트 당첨</p>
-<form action="{% url 'movies:score' movie.id %}" method='POST'>
-{{score_form.as_p}}
-<input type="submit" value='점수주기'>
-{% csrf_token %}
-</form>
-
-{% for score in scores %}
-<p>제가준 점수는 {{score.score}} 입니다.</p>
-{% empty %}
-<p>영화를 평가해주세요</p>
-{% endfor %}
-
-
 <p>{{movie.title}}
 {{ review_avg }}
  <form action="{% url 'movies:like' movie.pk %}" method='POST'>
