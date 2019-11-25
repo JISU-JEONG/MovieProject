@@ -3,6 +3,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from .models import Movie,Review, Score, Genre
 from .forms import ReviewForm, ScoreForm
+from accounts.models import User
 
 
 flag = 0
@@ -232,3 +233,33 @@ def score(request, movie_id):
             return redirect('movies:detail',movie_id)
     else:
         return redirect('accounts:login') 
+
+def search(request):
+    movies = Movie.objects.all()
+    users = User.objects.all()
+    genres = Genre.objects.all()
+    movies_list = []
+    users_list = []
+    genres_list = []
+    g_pk = 0
+    search = request.GET.get("search")
+    print(search)
+    for genre in genres:
+        if search in genre.name:
+            g_pk = genre.pk
+            break
+    for movie in movies:
+        if search in movie.title:
+            movies_list.append(movie)
+        if movie.genres.all().filter(pk=g_pk):
+            genres_list.append(movie)
+    for user in users:
+        if search in user.name:
+            users_list.append(user)
+    context = {
+        "movies" : movies_list,
+        "users" : users_list,
+        "genres" : genres_list 
+    }
+    print("들어왔당")
+    return render(request, 'movies/search.html', context)
