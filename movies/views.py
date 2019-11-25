@@ -19,6 +19,7 @@ def simil(u1, u2):
         return S/((S_u1**0.5)*(S_u2**0.5))
     except:
         return 0
+
 # rating 함수
 def rating(movie, user, cmp_users):
     S,abs_S = 0,0 
@@ -33,13 +34,56 @@ def rating(movie, user, cmp_users):
     except:
         return user.rate
 
-        
+def solve(user):
+    users = User.objects.all()
+    movies = Movie.objects.all()
+    tmps = []
+    cmp_users = []
+    for tmp in users:
+        if user == tmp: continue
+        cmp_users.append((simil(user, tmp), tmp))
+    cmp_users.sort(reverse=True)
+    for i in range(5):
+        tmp.append(cmp_users[i][1])
+    cmp_movies = []
+    for movie in movies:
+        if movie in user.rate_movies.all(): continue
+        cmp_movies.append((rating(movie,user,tmp),movie))
+    cmp_movies.sort(reverse=True)
+    recommend = []
+    for i in range(5):
+        recommend.append(cmp_movies[i][1])
+    return recommend
+
 # Create your views here.
 def index(request):
     movies = Movie.objects.all()
+    user = request.user 
+    recommend = []
+    if request.user.is_authenticated and len(user.rate_movies.all())>10:
+        recommend = solve(user)
+    else:
+        for movie in movies:
+            if request.user.is_authenticated and movie in user.rate_movies.all(): continue
+            S,cnt = 0,0
+            for tmp in movie.rate_users.all():
+                cnt+=1
+                S+=Score.objects.filter(movie_id = movie.id, user_id = request.user.id)[0].score
+            try:
+                recommend.append((S/cnt,movie))
+            except:
+                recommend.append((0,movie))
+        recommend.sort(key=lambda x: x[0],reverse=True)
+        reco = []
+        for i in range(5):
+            reco.append(recommend[i][1])
+        recommend = reco
     context = {
         'movies' : movies,
+        'recommend' : recommend
     }
+    print(movies)
+    print(recommend)
     return render(request,"movies/index.html",context)
 
 def detail(request, movie_id):

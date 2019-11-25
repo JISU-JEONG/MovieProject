@@ -109,7 +109,7 @@
 <div class="swiper-container">
 <h2>당신을 위한 추천 영화</h2>
     <div class="swiper-wrapper">
-        {% for movie in movies %}
+        {% for movie in recommend %}
             <div class="swiper-slide" style="background-image:url({{movie.poster_url}})" onclick="location.href='{% url 'movies:detail' movie.id %}'"></div>    
         {% endfor %}
     </div>

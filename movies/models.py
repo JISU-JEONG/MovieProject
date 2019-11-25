@@ -8,15 +8,21 @@ class Genre(models.Model):
 
 class Movie(models.Model):
     title = models.CharField(max_length=30)
-    audience = models.IntegerField()
     poster_url = models.CharField(max_length=140)
     description = models.TextField()
-    genre = models.ForeignKey(Genre,on_delete=models.CASCADE)
+    genres = models.ManyToManyField(
+        Genre,
+        related_name='movies_genre',
+        blank=True
+    )
     like_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='like_movies',
         blank=True
     )
+    rate_avg = models.FloatField()
+    release_date = models.DateField()
+    movie_id = models.IntegerField()
     grade = models.IntegerField()
     view_img = models.CharField(max_length=140)
     rate_users = models.ManyToManyField(
