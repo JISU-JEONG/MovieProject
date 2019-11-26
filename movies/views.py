@@ -254,7 +254,7 @@ def search(request):
         if movie.genres.all().filter(pk=g_pk):
             genres_list.append(movie)
     for user in users:
-        if search in user.name:
+        if search in user.username:
             users_list.append(user)
     context = {
         "movies" : movies_list,

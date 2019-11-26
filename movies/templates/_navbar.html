@@ -27,11 +27,11 @@
       {% endif %}
     </ul>
     <span class="navbar-text text-light">
-      <form action="" class="form-inline">
+      <form action="{% url 'movies:search' %}" class="form-inline" method="GET">
       {% if user.is_authenticated %}
         <span>{{ user.username }}님 반갑습니다.     </span>
       {% endif %}
-        <input class="form-control mr-sm-2" type="search" placeholder="영화검색" aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" placeholder="영화검색" aria-label="Search" name='search'>
         <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
       </form>
     </span>
