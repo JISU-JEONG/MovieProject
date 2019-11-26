@@ -1,4 +1,32 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static%}
+{% block css %}
+<style>
+.starR1{
+    background: url('{% static 'images/ico_review.png'%}') no-repeat -52px 0;
+    background-size: auto 100%;
+    width: 15px;
+    height: 30px;
+    float:left;
+    text-indent: -9999px;
+    cursor: pointer;
+}
+.starR2{
+    background: url('{% static 'images/ico_review.png'%}') no-repeat right 0;
+    background-size: auto 100%;
+    width: 15px;
+    height: 30px;
+    float:left;
+    text-indent: -9999px;
+    cursor: pointer;
+}
+.starR1.on{background-position:0 0;}
+.starR2.on{background-position:-15px 0;}
+</style>
+{% endblock %}
+
+
 {% block body %}
 <div class="carousel-item active" style="height: 500px;">
     <div class="d-block mx-auto" style="background: 
@@ -9,10 +37,41 @@
     <!-- <img src="{{movie.view_img}}" class="d-block mx-auto" style="width: 80%; height: 500px;" alt="movie.title"> -->
     <div class="carousel-caption text-left movie_index_font d-none d-md-block">
     </div>
-        <h1>{{movie.title}}</h1>
+
+<form action="{% url 'movies:like' movie.pk %}" method='POST'>
+ {% csrf_token %}
+ {% if user in movie.like_users.all %}
+<h1>{{movie.title}}<span><button class="btn" style="font-size:40px" type="submit"><i class="fas fa-heart" style="size:5px; color: red;"></i></button></span></h1>
+ {% else %}
+<h1>{{movie.title}}<span><button class="btn" style="font-size:40px" type="submit"><i class="far fa-heart" style="size:5px; color: red;"></i></button></span></h1>
+ {% endif %}
+ </form>
+
+<h3>나의 평점 : </h3>
+<form action="{% url 'movies:score' movie.pk %}" method='POST'>
+ {% csrf_token %}
+<div class="starRev">
+  <span class="starR1 on" name="score">별1_왼쪽</span>
+  <span class="starR2" name="score">별1_오른쪽</span>
+  <span class="starR1" name="score">별2_왼쪽</span>
+  <span class="starR2" name="score">별2_오른쪽</span>
+  <span class="starR1" name="score">별3_왼쪽</span>
+  <span class="starR2" name="score">별3_오른쪽</span>
+  <span class="starR1" name="score">별4_왼쪽</span>
+  <span class="starR2" name="score">별4_오른쪽</span>
+  <span class="starR1" name="score">별5_왼쪽</span>
+  <span class="starR2" name="score">별5_오른쪽</span>
+</div>
+<input type="submit">
+</form>
+
+
         <h3>{{movie.description}}</h3>
-            <span style="color: white; font-size: 20px;"><i class="fas fa-star" style="size:5px; color: orange;"></i> 0.0 </span>
-            <span style="color: white; font-size: 20px;"><i class="fas fa-heart" style="color: red;"></i> 0 </span> 
+        <span style="color: #ffffff; font-size: 20px;"><i class="fas fa-star"
+                style="size:5px; color: orange;"></i> {{movie.rate_avg}} </span>
+        <span style="color: #ffffff; font-size: 20px;"><i class="fas fa-heart"
+                style="color: red;"></i> {{movie.like_users.all.count}} </span>
+
 {% if messages %}
 <div class="messages">
     {% for message in messages %}
@@ -57,3 +116,13 @@
  </p>
 {% endfor %}
 {% endblock  %}
+
+{% block script %}
+<script>
+    $('.starRev span').click(function(){
+    $(this).parent().children('span').removeClass('on');
+    $(this).addClass('on').prevAll('span').addClass('on');
+    return false;
+    });
+</script>
+{% endblock %}

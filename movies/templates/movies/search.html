@@ -7,19 +7,5 @@
     </style>
     {% endblock %}
 {% block body %}
-<h1>여기가 검색 부분 입니다.</h1>
-<h2>제목 검색</h2>
-{% for movie in movies %}
-    <p>{{movie.title}}</p>
-{% endfor %}
-<hr>
-<h2>유저 검색</h2>
-{% for user in users %}
-<p>{{user.name}}</p>
-{% endfor %}
-<hr>
-<h2>장르별 영화</h2>
-{% for movie in genres %}
-    <p>{{movie.title}}</p>
-{% endfor %}
+
 {% endblock %}
