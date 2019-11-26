@@ -156,6 +156,13 @@ def detail(request, movie_id):
     score_form = ScoreForm()
     reviews = Review.objects.filter(movie_id=movie_id)
     scores = Score.objects.filter(movie_id=movie_id)
+    if request.user.is_authenticated:
+        if request.user in movie.rate_users.all():
+            score = scores.filter(user_id=request.user.id)[0].score
+        else:
+            score = 0
+    else:
+        score = 0
     try:
         review_avg = sum(map(lambda x: x.score,reviews))/len(reviews)
     except:
@@ -167,7 +174,8 @@ def detail(request, movie_id):
         'review_form' : review_form,
         'review_avg' : review_avg,
         'score_form' : score_form,
-        'scores' : scores
+        'scores' : scores,
+        'myscore' : score
     }
     return render(request, "movies/detail.html", context)
 
