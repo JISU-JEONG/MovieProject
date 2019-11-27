@@ -8,9 +8,11 @@ from accounts.models import User
 
 flag = 0
 movie_list_1 = []
+recommend_tmp = []
+user_tmp = ''
 # simil 함수 유저가 준 점수 평균
 def simil(u1, u2):
-    movies = movies.objects.all()
+    movies = Movie.objects.all()
     S, S_u1, S_u2 =0,0,0
     for movie in movies:
         if u1 in movie.rate_users.all() and u2 in movie.rate_users.all():
@@ -27,7 +29,7 @@ def simil(u1, u2):
 def rating(movie, user, cmp_users):
     S,abs_S = 0,0
     for cmp_user in cmp_users:
-        if cmp_user in movies.rate_user.all(): continue
+        if cmp_user not in movie.rate_users.all(): continue
         result = simil(user,cmp_user)
         r = Score.objects.filter(movie_id = movie.id, user_id = cmp_user.id)[0].score
         S += (result)*(r-cmp_user.rate)
@@ -44,16 +46,16 @@ def solve(user):
     for tmp in users:
         if user == tmp: continue
         cmp_users.append((simil(user, tmp), tmp))
-    cmp_users.sort(reverse=True)
+    cmp_users.sort(key=lambda x: x[0],reverse=True)
     for i in range(5):
         tmps.append(cmp_users[i][1])
     cmp_movies = []
     for movie in movies:
         if movie in user.rate_movies.all(): continue
         cmp_movies.append((rating(movie,user,tmps),movie))
-    cmp_movies.sort(reverse=True)
+    cmp_movies.sort(key=lambda x: x[0],reverse=True)
     recommend = []
-    for i in range(5):
+    for i in range(10):
         recommend.append(cmp_movies[i][1])
     return recommend
 # Create your views here.
@@ -62,8 +64,8 @@ def index(request):
     user = request.user
     genres = Genre.objects.all()
     recommend = []
-    global movie_list_1
-    global flag
+    global movie_list_1,recommend_tmp
+    global flag,user_tmp
     if flag:
         movie_list = movie_list_1
     elif not flag:
@@ -107,8 +109,13 @@ def index(request):
                 movie_list[17].append(movie)
             flag = 1
             movie_list_1 = movie_list
-    if request.user.is_authenticated and len(user.rate_movies.all())>10:
-        recommend = solve(user)
+    if request.user.is_authenticated and len(user.rate_movies.all())>=10:
+        if recommend_tmp == [] or user_tmp != request.user:
+            recommend = solve(user)
+            recommend_tmp = recommend
+            user_tmp = request.user
+        else:
+            recommend = recommend_tmp
     else:
         for movie in movies:
             if request.user.is_authenticated and movie in user.rate_movies.all(): continue
@@ -122,7 +129,7 @@ def index(request):
                 recommend.append((0,movie))
         recommend.sort(key=lambda x: x[0],reverse=True)
         reco = []
-        for i in range(5):
+        for i in range(10):
             reco.append(recommend[i][1])
         recommend = reco
     context = {

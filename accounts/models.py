@@ -9,3 +9,4 @@ class User(AbstractUser):
                     blank=True
                     )
     rate = models.FloatField(default=0)
+    recommend = models.BooleanField(default=False)

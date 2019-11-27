@@ -27,6 +27,8 @@ def signup(request):
         form = ChangeUserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            user.recommend = True
+            user.save()
             auth_login(request,user)
             return redirect('movies:index')
     else:
@@ -41,6 +43,8 @@ def login(request):
         form = AuthenticationForm(request,request.POST)
         if form.is_valid():
             user = form.get_user()
+            user.recommend = True
+            user.save()
             auth_login(request,user)
             return redirect('movies:index')
     else:
@@ -51,6 +55,9 @@ def login(request):
     return render(request,'accounts/login.html',context)
 
 def logout(request):
+    user = request.user
+    user.recommend = False
+    user.save()
     auth_logout(request)
     return redirect('movies:index')
 

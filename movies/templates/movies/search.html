@@ -10,7 +10,7 @@
 <h1>여기가 검색 부분 입니다.</h1>
 <h2>제목 검색</h2>
 {% for movie in movies %}
-    <p>{{movie.title}}</p>
+    <a href="{% url 'movies:detail' movie.pk %}"><p>{{movie.title}}</p></a>
 {% endfor %}
 <hr>
 <h2>유저 검색</h2>
