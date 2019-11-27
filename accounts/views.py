@@ -5,15 +5,18 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.http import HttpResponseForbidden
 # Create your views here.
 
-def index(request):
-    users = User.objects.all()
+# def index(request):
+#     users = User.objects.all()
 
-    context = {
-        'users' : users
-    }
-    return render(request,'accounts/index.html',context)
+#     context = {
+#         'users' : users
+#     }
+#     return render(request,'accounts/index.html',context)
 
 def detail(request,user_pk):
     user = User.objects.get(pk=user_pk)
@@ -61,15 +64,18 @@ def logout(request):
     auth_logout(request)
     return redirect('movies:index')
 
-@require_POST
+@login_required
 def follow(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
-    if request.user.is_authenticated:
-        if request.user != user:
-            if request.user in user.followings.all():
-                user.followings.remove(request.user)
-            else:
-                user.followings.add(request.user)
-        return redirect('accounts:detail', user_pk)
+    if request.is_ajax():
+        user = get_object_or_404(User, pk=user_pk)
+        is_followed = True
+        if request.user in user.followings.all():
+            user.followings.remove(request.user)
+            is_followed = False
+        else:
+            user.followings.add(request.user)
+            is_followed = True
+        count = user.followings.count()
+        return JsonResponse({'is_followed':is_followed,'count':count})
     else:
-        return redirect('accounts:login')
+        return HttpResponseForbidden()

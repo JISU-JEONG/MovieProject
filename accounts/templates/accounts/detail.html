@@ -1,27 +1,132 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% block body %}
-<h1>{{puser.username}} 팔로우수: {{puser.followings.count}} 팔로잉수: {{puser.followers.count}}
-<form action="{% url 'accounts:follow' puser.pk %}" method="POST">
-{% csrf_token %}
-{% if user != puser %}
-{% if user in puser.followings.all %}
-<input type="submit" value="팔로우취소">
-{% else %}
-<input type="submit" value="팔로우">
-{% endif %}
-{% endif %}
-</form>
-</h1>
-<hr>
-<h1>{{ puser.username }}가 한 리뷰</h1>
-{% for review in puser.review_set.all %}
-<p> 평점 : {{review.score}} 리뷰 : {{review.content}} </p>
-{% endfor %}
-<hr>
-<h1>{{ puser.username }}가 좋아하는 영화</h1>
-{% for movie in puser.like_movies.all %}
-{{movie.title}}
-{% endfor %}
-<hr>
+<div class="container BHS">
+  <div>
+    <h2 class="BHS">{{puser.username}}</h2>
+    <p>Name : {{puser.last_name}} {{puser.first_name}}</p>
+    <p>email : {{puser.email}}</p>
+  </div>
+  <div class="row divider text-center">
+    <div class="col-2 emphasis">
+      <h2><strong class="BHS">{{puser.followings.all.count}}</strong></h2>
+      <p><small>Followers</small></p>
+    </div>
+    <div class="col-2 emphasis">
+      <h2><strong class="BHS">{{puser.followers.all.count}}</strong></h2>
+      <p><small>Followings</small></p>
+    </div>
+  </div>
+  {% if user == puser %}
+  {% if user. %}{% endif %}
+  {% else %}
+  <div style="width:30%">
+    {% if user in puser.followings.all %}
+    <button id="follow-button" data-id="{{puser.id}}"
+      class="fa fa-minus-circle btn btn-warning btn-block">Follow</button>
+    {% else %}
+    <button id="follow-button" data-id="{{puser.id}}"
+      class="fa fa-plus-circle btn btn-success btn-block">Follow</button>
+    {% endif %}
+  </div>
+  {% endif %}
+  <hr>
+  <h2 class="BHS">{{puser.last_name}}{{puser.first_name}}님이 담은 영화</h2>
+  <div class="row">
+    {% for movie in puser.like_movies.all %}
+    <div class="col-lg-6 card mb-3">
+      <div class="row no-gutters">
+        <div class="col-3">
+          <a href="{% url 'movies:detail' movie.id %}"><img src="{{movie.poster_url}}" class="card-img"
+              alt="{{movie.title}}"></a>
+        </div>
+        <div class="col-9">
+          <div class="card-body">
+            <h5 class="BHS card-title"><a href="{% url 'movies:detail' movie.id %}">{{movie.title}}</a></h5>
+            <p class="card-text">리뷰 :
+              {% for review in puser.review_set.all %}
+              {% if review.movie_id == movie.id %}
+              {{review.content}} <br>
+              {% endif %}
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <hr style="color:black">
+  <table class="table BHS">
+    <h3 class="BHS">Following 유저 목록</h3>
+    <thead>
+      <tr>
+        <th scope="col">아이디</th>
+        <th scope="col">이름</th>
+        <th scope="col">이메일</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in puser.followers.all %}
+      <tr>
+        <td><a href="{% url 'accounts:detail' user.id %}">{{user.username}}</a></td>
+        <td><a href="{% url 'accounts:detail' user.id %}">{{user.last_name}}{{user.first_name}}</a></td>
+        <td><a href="{% url 'accounts:detail' user.id %}">{{user.email}}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <table class="table BHS">
+    <h3 class="BHS">Follower 유저 목록</h3>
+    <thead>
+      <tr>
+        <th scope="col">아이디</th>
+        <th scope="col">이름</th>
+        <th scope="col">이메일</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in puser.followings.all %}
+      <tr>
+        <td><a href="{% url 'accounts:detail' user.id %}">{{user.username}}</a></td>
+        <td><a href="{% url 'accounts:detail' user.id %}">{{user.last_name}}{{user.first_name}}</a></td>
+        <td><a href="{% url 'accounts:detail' user.id %}">{{user.email}}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  const followbutton = document.querySelector('#follow-button')
+  const followercount = document.querySelector('#follow-count')
+  followbutton.addEventListener('click', function (event) {
+    console.log(event.target)
+    axios.defaults.xsrfCookieName = 'csrftoken'
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+    axios.defaults.headers.common['X-REQUESTED-WITH'] = 'XMLHttpRequest'
+    axios.post(`/accounts/${event.target.dataset.id}/follow/`)
+      .then(response => {
+        console.log(response.data)
+        console.log(event.target)
+        if (response.data.is_followed) {
+          event.target.classList.remove('btn-success')
+          event.target.classList.add('btn-warning')
+          event.target.classList.remove('fa-plus-circle')
+          event.target.classList.add('fa-minus-circle')
+        } else {
+          event.target.classList.remove('btn-warning')
+          event.target.classList.add('btn-success')
+          event.target.classList.remove('fa-minus-circle')
+          event.target.classList.add('fa-plus-circle')
+        }
+        followercount.innerText = `${response.data.count}`
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  })
+</script>
 {% endblock %}

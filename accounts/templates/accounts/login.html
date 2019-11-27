@@ -3,15 +3,15 @@
 {% load static%}
 {% block body %}
 <div style=" height:100vh; background-position: center; background-image: url({% static 'movies/star.gif'%})">
-<div class="container text-right" style="width:300px; height:100%;padding-top:300px">
-<div class="" style="color:white;">
-<form action="" method='POST'>
-{% csrf_token %}
-{{form.as_p}}
-<button  onclick="location.href='{% url 'accounts:signup' %}'" class="btn btn-secondary">회원가입</button>
-<button class="btn btn-secondary" type="submit">로그인</button>
-</form>
-</div>
-</div>
+  <div class="container text-center" style="width:350px; height:100%;padding-top:300px">
+    <div class="" style="color:white;">
+      <form class="BHS" action="" method='POST'>
+        {% csrf_token %}
+        {{form.as_p}}
+        <button onclick="location.href='{% url 'accounts:signup' %}'" class="BHS btn btn-secondary">회원가입</button>
+        <button class="BHS btn btn-secondary" type="submit">로그인</button>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock  %}

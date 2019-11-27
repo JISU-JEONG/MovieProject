@@ -3,11 +3,31 @@
 {% load static%}
 {% block css %}
 <style>
+    body {
+        background: #fff;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+    }
 
+    .swiper-container {
+        width: 100%;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .swiper-slide {
+        background-position: center;
+        background-size: cover;
+        width: 300px;
+        height: 420px;
+    }
 </style>
 {% endblock %}
 {% block body %}
-<div class="" style="">
+<div class="Noto" style="">
     <div style="max-width: auto; max-height: auto;">
         <div class="col control">
             <div id="carouselExampleFade" class="row carousel slide carousel-fade " data-ride="carousel">
@@ -22,7 +42,7 @@
                                 width: 100%;
                                 height: 100%;"></div>
                             <!-- <img src="{{movie.view_img}}" class="d-block mx-auto" style="width: 80%; height: 500px;" alt="movie.title"> -->
-                            <div class="carousel-caption text-left movie_index_font d-none d-md-block">
+                            <div class=" carousel-caption text-left movie_index_font d-none d-md-block">
                                 <span style="color: white; font-size: 20px;"><i class="fas fa-star"
                                         style="size:5px; color: orange;"></i> {{movie.rate_avg}} </span>
                                 <span style="color: white; font-size: 20px;"><i class="fas fa-heart"
@@ -77,12 +97,10 @@
     </div>
 </div>
 </div>
-{% comment %} style="background-size: cover;background-position: center; background-image:
-url({% static 'movies/sutter.jpg'%})" {% endcomment %}
-<div class="text-center text-white mg-0" style="background-position: center; background-image: url({% static 'movies/star.gif'%})">
-    {% comment %} <div style="width:100%; height:500px"> {% endcomment %}
+<div class="text-center text-white mg-0"
+    style="background-position: center; background-image: url({% static 'movies/star.gif'%})">
     <div class="swiper-container">
-        <h1>당신을 위한 추천 영화</h1>
+        <h1 class="Jua">당신을 위한 추천 영화</h1>
         <div class="swiper-wrapper">
             {% for movie in recommend %}
             {% if movie.poster_url %}
@@ -90,7 +108,7 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
@@ -100,7 +118,7 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
     </div>
 
     <div class="swiper-container">
-        <h1> 따뜻함을 느끼고 싶은 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 따뜻함을 느끼고 싶은 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in fams %}
             {% if movie.poster_url %}
@@ -108,16 +126,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 등골이 오싹하고 싶은 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 등골이 오싹하고 싶은 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in afrs %}
             {% if movie.poster_url %}
@@ -125,16 +143,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 연애하고 싶은 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 연애하고 싶은 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in romans %}
             {% if movie.poster_url %}
@@ -142,16 +160,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 몰입도 높은 영화를 보고 싶은 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 몰입도 높은 영화를 보고 싶은 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in thrils %}
             {% if movie.poster_url %}
@@ -159,16 +177,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 역사에 관심있는 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 역사에 관심있는 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in his %}
             {% if movie.poster_url %}
@@ -176,16 +194,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 비오는 날 집에서 이불덮고 보고 싶은 영화 </h1>
+        <h1 class="Jua"> 비오는 날 집에서 이불덮고 보고 싶은 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in guls %}
             {% if movie.poster_url %}
@@ -193,16 +211,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 다 때려 부시는걸 좋아하는 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 다 때려 부시는걸 좋아하는 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in actions %}
             {% if movie.poster_url %}
@@ -210,16 +228,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 위험과 악을 정의 이름으로 무찌르는 영화 </h1>
+        <h1 class="Jua"> 위험과 악을 정의 이름으로 무찌르는 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in advs %}
             {% if movie.poster_url %}
@@ -227,16 +245,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 판타지적인 것을 좋아하는 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 판타지적인 것을 좋아하는 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in fans %}
             {% if movie.poster_url %}
@@ -244,16 +262,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 웃음을 필요로 하는 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 웃음을 필요로 하는 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in comis %}
             {% if movie.poster_url %}
@@ -261,16 +279,16 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-                <!-- Add Pagination -->
+        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-container">
-        <h1> 공상과학에 빠진 당신을 위한 영화 </h1>
+        <h1 class="Jua"> 공상과학에 빠진 당신을 위한 영화 </h1>
         <div class="swiper-wrapper">
             {% for movie in SFs %}
             {% if movie.poster_url %}
@@ -278,14 +296,35 @@ url({% static 'movies/sutter.jpg'%})" {% endcomment %}
                                 url('{{movie.poster_url}}') no-repeat; 
                                 background-size: 100% 100%;"
                 onclick="location.href='{% url 'movies:detail' movie.id %}'">
-                <h2>{{movie.title}}</h2>
+                <h2 class="Jua">{{movie.title}}</h2>
             </div>
             {% endif %}
             {% endfor %}
         </div>
         <!-- Add Pagination -->
-    <div class="swiper-pagination"></div>
+        <div class="swiper-pagination"></div>
     </div>
 </div>
 </div>
+{% endblock  %}
+
+{% block script %}
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        coverflowEffect: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: true,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+        },
+    });
+</script>
 {% endblock  %}

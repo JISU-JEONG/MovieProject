@@ -3,6 +3,40 @@
 {% load static%}
 {% block css %}
 <style>
+    html, body {
+      position: relative;
+      height: 100%;
+    }
+    body {
+      background: #eee;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color:#000;
+      margin: 0;
+      padding: 0;
+    }
+    .swiper-container {
+      width: 80%;
+      height: 50%;
+    }
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      /* Center slide text vertically */
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+    }
   .score>.input,
   .score>.input>label:hover,
   .score>.input>input:focus+label,
@@ -110,6 +144,8 @@
     z-index: 1;
   }
   .box{background-color:rgba( 255, 255, 255, 0.3 );}
+
+  
 </style>
 {% endblock %}
 
@@ -117,28 +153,22 @@
 {% block body %}
 <div style="height: 100%; width:100%">
 
-  <div class="row mx-0" style="background: 
+  <div class="row mx-0 Jua" style="background: 
     url('{{movie.view_img}}') no-repeat; 
     background-size: 100% 100%;
     background-color:rgba( 255, 255, 255, 0.5 );
     width: 100%;
     height: 100%;">
     <div class="col-sm box mx-0">
-        <div class="">
-        <form action="{% url 'movies:like' movie.pk %}" method='POST'>
-        {% csrf_token %}
+        <div class="mt-3  ">
+        {% if user.is_authenticated %}
         {% if user in movie.like_users.all %}
-        <span><button class="btn mt-3" style="width:100px;font-size:20px" type="submit"><i class="fas fa-heart"
-              style="size:5px; color: red;">
-              <br>
-              <span style="font-size:15px; color: white;">담기취소</span></i></button></span>
+        <i id="like-button" data-id="{{movie.id}}" class="fas fa-heart text-center" style="font-size:40px; color: red;"></i>
         {% else %}
-        <span><button class="btn mt-3" style="width:100px; font-size:20px" type="submit"><i class="far fa-heart"
-              style="size:5px; color: red;">
-              <br>
-              <span style="font-size:15px; color: white;">담기</span></i></button></span>
+        <i id="like-button" data-id="{{movie.id}}" class="far fa-heart text-center" style="font-size:40px; color: red;"></i>
         {% endif %}
-      </form>
+        {% endif %}
+
         </div>
         <div class="text-center my-5">
         <img src="{{movie.poster_url}}" class="my-auto" style="width: 200; height: 300px;" alt="movie.title">
@@ -149,16 +179,15 @@
     <div class="col-sm box row mx-0 ">
       <div class="col my-5">
         <div>
-          <span style="color: black; font-size: 20px;"><i class="fas fa-star" style="size:5px; color: orange;"></i>
-            {{movie.rate_avg}} </span>
-          <span style="color: black; font-size: 20px;"><i class="fas fa-heart" style="color: red;"></i>
-            {{movie.like_users.all.count}} </span>
+        <i class="fas fa-star" style="size:5px; color: orange;"><span class="Jua" style="color: black; font-size: 20px;">  {{movie.rate_avg}}  </span></i>
+        <i class="fas fa-heart" style="color: red;font-size: 20px;"><span class="Jua" id="like-count" style="color: black; font-size: 20px;">  {{movie.like_users.all.count}}</span></i>
+            
         </div>
         <div style="color:black">
-          <h1>{{movie.title}}</h1>
-          <h3>내가 준 평점 : {{myscore}}</h3>
+          <h1 class="Jua">{{movie.title}}</h1>
+          <h3 class="Jua">내가 준 평점 : {{myscore}}</h3>
         </div>
-        <form action="{% url 'movies:score' movie.pk %}" method='POST'>
+        <form class="Jua" action="{% url 'movies:score' movie.pk %}" method='POST'>
           {% csrf_token %}
           {% comment %} {{ score_form }} {% endcomment %}
           {% comment %} <div class="starRev">
@@ -190,14 +219,14 @@
             <button type="submit" class="btn btn-secondary">별점주기</button>
           </span>
         </form>
-          <h4>장르 : 
+          <h4 class="Jua">장르 : 
           {% for genre in movie.genres.all %}
           <span>{{genre.name}}</span>
           {% endfor %}
           </h4>
-          <h4>개봉일 : {{movie.release_date}}</h4>
+          <h4 class="Jua">개봉일 : {{movie.release_date}}</h4>
           <br>
-<div class="badge text-wrap" style="color:rgb(24, 23, 23); width: 300px ;font-size:14px;">
+<div class="badge text-wrap" style="color:rgb(24, 23, 23); width: 300px ;font-size:16px;">
     <!-- <h1>줄거리</h1> -->
     {{movie.description}}
   </div>
@@ -208,20 +237,17 @@
     </div> {% endcomment %}
   </div>
 </div>
-<hr >
 <hr>
-<div class="text-center">
+{% if teaser %}
+<div >
+<iframe class="mx-auto" src="{{teaser}}" frameborder="0" style="display:block; width:70vw; height: 70vh"></iframe>
+</div>
+{% else %}
+{% endif %}
+<hr>
+<hr>
 
-</div>
-<hr>
-<div class="mx-3">
-<form action="{% url 'movies:review_new' movie.id %}" method="POST">
-  {% csrf_token %}
-  {{ review_form.content }}
-  <button type="submit" class="btn btn-light">리뷰등록</button>
-</form>
-</div>
-<table class="table table-sm mx-3">
+<table class="Jua table table-sm mx-3">
     <thead>
       <tr>
         <th scope="col-1">#</th>
@@ -231,9 +257,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for review in movie.review_set.all %}
-
-      
+      {% for review in movie.review_set.all %}   
       <tr>
         <th scope="row">{{review.id}}</th>
         <td><a href="{% url 'accounts:detail' review.user.id%}">{{review.user.username}}</a></td>
@@ -251,6 +275,16 @@
     </tbody>
   </table>
 
+<div class="mx-3">
+<form action="{% url 'movies:review_new' movie.id %}" method="POST">
+  {% csrf_token %}
+  <div >
+  <input style="width:300px" type="text" name="content" maxlength="140" required="" id="id_content">
+  <button type="submit" class="Jua btn btn-light">한줄평 등록</button>
+  </div>
+</form>
+<hr>
+</div>
 {% if messages %}
 <div class="messages">
   {% for message in messages %}
@@ -258,35 +292,36 @@
     {% endfor %}
 </div>
 {% endif %}
-
-
-
 <hr>
+  <div class="Jua text-center my-0">
+  <h3 class="Jua my-0">같은 장르의 영화 추천</h3>
+  </div>
+  <div class="mx-auto" style="width:80%; height:400px">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+  {% for genre in movie.genres.all %}
+    {% for movie in genre.movies_genre.all %}
+    <div class="swiper-slide" style="background: url('{{movie.poster_url}}')no-repeat; background-size: 70% 70%; background-position:center"
+                onclick="location.href='{% url 'movies:detail' movie.id %}'"></div>
+    {% endfor %}
+    {% endfor %}
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+    <!-- Add Arrows -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+  </div>
 
-<hr>
-<p>리뷰 하기</p>
-<form action="{% url 'movies:review_new' movie.id %}" method="POST">
-  {% csrf_token %}
-  {{ review_form.content }}
-  <input type="submit" value='리뷰하기'>
-</form>
-{% for review in movie.review_set.all %}
-<p>{{review.user}} => {{review.content}} {{ review.score }}
-  {% if user == review.user %}
-  <form action="{% url 'movies:review_delete' movie.pk review.pk %}" method='POST'>
-    {% csrf_token %}
-    <input type="submit" value='리뷰 삭제'>
-  </form>
-  {% endif %}
-</p>
-{% endfor %}
+
 {% endblock  %}
 
 {% block script %}
 <script>
   // star rating
   var starRating = function () {
-    var $star = $(".score"),
+    var $star = $(".score")
       // $result = $star.find("output>b");
       $(document)
       .on("focusin", ".score>.input", function () {
@@ -300,21 +335,49 @@
           }
         }, 100);
       })
-      .on("change", ".score :radio", function () {
-        $result.text($(this).next().text());
-      })
-      .on("mouseover", ".score label", function () {
-        $result.text($(this).text());
-      })
-      .on("mouseleave", ".score>.input", function () {
-        var $checked = $star.find(":checked");
-        if ($checked.length === 0) {
-          $result.text("0");
-        } else {
-          $result.text($checked.next().text());
-        }
-      });
   };
   starRating();
+
+  const likebutton = document.querySelector('#like-button')
+  const likecount = document.querySelector('#like-count')
+  likebutton.addEventListener('click', function(event){
+    console.log(event.target.dataset.id)
+    // POST 요청 보낼시 csrftoken을 AJAX요청시 설정하는 법
+    axios.defaults.xsrfCookieName = 'csrftoken'
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+    // django is_ajax() 분기가 되는 기준이 아래의 헤더 설정에 따라서 진행
+    axios.defaults.headers.common['X-REQUESTED-WITH'] = 'XMLHttpRequest'
+    axios.post(`/movies/${event.target.dataset.id}/like/`)
+      .then(response =>{
+        console.log(response.data)
+        if (response.data.is_liked){
+          event.target.classList.remove('far')
+          event.target.classList.add('fas')
+        }
+        else{
+          event.target.classList.remove('fas')
+          event.target.classList.add('far')
+        }
+        likecount.innerText = `  ${response.data.count}`
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  })
+    var swiper = new Swiper('.swiper-container', {
+      slidesPerView: 5,
+      spaceBetween: 30,
+      slidesPerGroup: 5,
+      loop: true,
+      loopFillGroupWithBlank: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
 </script>
 {% endblock %}

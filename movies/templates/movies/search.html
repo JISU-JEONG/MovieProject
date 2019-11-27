@@ -79,14 +79,19 @@
     </tr>
   </thead>
   <tbody>
-      {% for user in users %}
+    {% for user in users %}
     <tr>
-      <td>{{user.username}}</td>
-      <td>{{user.firstname}}{{user.lastname}}</td>
-      <td>{{user.email}}</td>
+      <td><a href="{% url 'accounts:detail' user.id %}">{{user.username}}</a></td>
+      <td><a href="{% url 'accounts:detail' user.id %}">{{user.last_name}}{{user.first_name}}</a></td>
+      <td><a href="{% url 'accounts:detail' user.id %}">{{user.email}}</a></td>
     </tr>
-      {% endfor %}
+    {% endfor %}
   </tbody>
 </table>
+{% else %}
+<h2>유저 목록</h2>
+<div class="mx-3">
+  <p>검색결과가 없습니다.</p>
+</div>
 {% endif %}
 {% endblock %}

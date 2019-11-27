@@ -1,9 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Movie,Review, Score, Genre
 from .forms import ReviewForm, ScoreForm
 from accounts.models import User
+from django.http import HttpResponseForbidden, HttpResponse
+
+from django.http import JsonResponse
+import json
+import requests
 
 
 flag = 0
@@ -159,6 +165,15 @@ def index(request):
 
 def detail(request, movie_id):
     movie = get_object_or_404(Movie, pk=movie_id)
+    url = f'https://api.themoviedb.org/3/movie/{movie.movie_id}/videos?language=ko-KR&api_key=5e886c8bf9b218d5e7c201655a0015ec'
+    r = requests.get(url)
+    data = json.loads(r.text)
+    movie_dict = data["results"]
+    if movie_dict:
+        token = movie_dict[0]['key']
+        teaser = f'https://www.youtube.com/embed/{token}'
+    else:
+        teaser = ''
     review_form = ReviewForm()
     score_form = ScoreForm()
     reviews = Review.objects.filter(movie_id=movie_id)
@@ -174,7 +189,7 @@ def detail(request, movie_id):
         review_avg = sum(map(lambda x: x.score,reviews))/len(reviews)
     except:
         review_avg = 0
-    # print(reviews)        
+    # print(reviews)
     # print(review_sum)
     context = {
         'movie' : movie,
@@ -182,7 +197,8 @@ def detail(request, movie_id):
         'review_avg' : review_avg,
         'score_form' : score_form,
         'scores' : scores,
-        'myscore' : score
+        'myscore' : score,
+        'teaser' : teaser
     }
     return render(request, "movies/detail.html", context)
 
@@ -208,18 +224,22 @@ def review_delete(request, movie_id,review_id):
     review.delete()
     return redirect('movies:detail',movie_id)
 
-@require_POST
+@login_required
 def like(request, movie_id):
-    movie = get_object_or_404(Movie, pk=movie_id)
-    user = request.user
-    if user.is_authenticated:
+    if request.is_ajax():
+        movie = get_object_or_404(Movie, pk=movie_id)
+        user = request.user
+        is_liked = True
         if user in movie.like_users.all():
             movie.like_users.remove(user)
+            is_liked = False
         else:
             movie.like_users.add(user)
-        return redirect('movies:detail',movie_id)
+            is_liked = True
+        count = movie.like_users.count()
+        return JsonResponse({'is_liked':is_liked,'count':count})
     else:
-        return redirect('accounts:login') 
+        return HttpResponseForbidden()
 
 @require_POST
 def score(request, movie_id):
