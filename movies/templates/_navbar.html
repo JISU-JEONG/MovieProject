@@ -1,39 +1,40 @@
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="/movies/">SoulLess</a>
-  <p class ></p>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav mr-auto">
-      <!-- 로그인이 되어 있다면, -->
-      {% if user.is_authenticated %}
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'accounts:detail' user.pk %}">MyPage</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:logout'%}">로그아웃</a>
-      </li>
-      <!-- 로그인이 되어 있지 않다면, -->
-      {% else %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:signup'%}">회원가입</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:login'%}">로그인</a>
-      </li>
-      {% endif %}
-    </ul>
-    <span class="navbar-text text-light">
-      <form action="{% url 'movies:search' %}" class="form-inline" method="GET">
-      {% if user.is_authenticated %}
-        <span>{{ user.username }}님 반갑습니다.     </span>
-      {% endif %}
-        <input class="form-control mr-sm-2" type="search" placeholder="영화검색" aria-label="Search" name='search'>
-        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-      </form>
-    </span>
-  </div>
-</nav> 
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/movies/">SoulLess</a>
+    <p class ></p>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <!-- 로그인이 되어 있다면, -->
+        {% if user.is_authenticated %}
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'accounts:detail' user.pk %}">MyPage</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'accounts:logout'%}">로그아웃</a>
+        </li>
+        <!-- 로그인이 되어 있지 않다면, -->
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'accounts:signup'%}">회원가입</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'accounts:login'%}">로그인</a>
+        </li>
+        {% endif %}
+      </ul>
+      <span class="navbar-text text-light">
+        <form action="{% url 'movies:search' %}" class="form-inline" method="GET">
+        {% if user.is_authenticated %}
+          <span>{{ user.username }}님 반갑습니다.     </span>
+        {% endif %}
+          <input class="form-control mr-sm-2" type="search" placeholder="영화검색" aria-label="Search" name='search'>
+          <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </span>
+    </div>
+  </nav> 
+</header>
