@@ -161,12 +161,10 @@
     height: 100%;">
     <div class="col-sm box mx-0">
         <div class="mt-3  ">
-        {% if user.is_authenticated %}
         {% if user in movie.like_users.all %}
         <i id="like-button" data-id="{{movie.id}}" class="fas fa-heart text-center" style="font-size:40px; color: red;"></i>
         {% else %}
         <i id="like-button" data-id="{{movie.id}}" class="far fa-heart text-center" style="font-size:40px; color: red;"></i>
-        {% endif %}
         {% endif %}
 
         </div>

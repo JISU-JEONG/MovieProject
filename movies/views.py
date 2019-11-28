@@ -257,6 +257,13 @@ def score(request, movie_id):
             form.save()
             S = 0
             cnt = 0
+            for user in movie.rate_users.all():
+                cnt+=1
+                S +=Score.objects.filter(movie_id = movie_id, user_id = user.id)[0].score
+            movie.rate_avg = S/cnt
+            movie.save()
+            S = 0
+            cnt = 0
             for movie in user.rate_movies.all():
                 cnt+=1
                 S += Score.objects.filter(movie_id = movie.id, user_id = request.user.id)[0].score
@@ -267,7 +274,7 @@ def score(request, movie_id):
             user.save()
             return redirect('movies:detail',movie_id)
     else:
-        return redirect('accounts:login') 
+        return redirect('accounts:login')
 
 def search(request):
     movies = Movie.objects.all()
@@ -294,7 +301,6 @@ def search(request):
     context = {
         "movies" : movies_list,
         "users" : users_list,
-        "genres" : genres_list 
+        "genres" : genres_list
     }
-    print("들어왔당")
     return render(request, 'movies/search.html', context)
